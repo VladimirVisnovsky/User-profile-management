@@ -2,6 +2,7 @@
 import json
 import os
 import sqlite3
+from datetime import datetime
 
 # Third-party libraries
 from flask import Flask, redirect, request, url_for
@@ -12,6 +13,7 @@ from flask_login import (
     login_user,
     logout_user,
 )
+
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 
@@ -54,11 +56,10 @@ def load_user(user_id):
 def index():
     if current_user.is_authenticated:
         return (
-            "<p>Hello, {}! You're logged in! Email: {}</p>"
-            "<div><p>Google Profile Picture:</p>"
-            '<img src="{}" alt="Google profile pic"></img></div>'
+            "<p>Hello, {} {}! You're logged in!</p>"
+            "<p>Email: {}</p>"
             '<a class="button" href="/logout">Logout</a>'.format(
-                current_user.name, current_user.email, current_user.profile_pic
+                current_user.first_name, current_user.second_name, current_user.email
             )
         )
     else:
@@ -122,20 +123,30 @@ def callback():
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
+        users_first_name = userinfo_response.json()["given_name"]
+        users_second_name = userinfo_response.json()["family_name"]
     else:
         return "User email not available or not verified by Google.", 400
+
+    ui_lang = "sk"
+    ui_settings = "default ui settings"
+    employee_account = True
+    access_rights = "complete access"
+    logon_status = 2  # 2 = logged on, 0 = logged off
+    logon_last_modif = datetime.now()
 
     # Create a user in your db with the information provided
     # by Google
     user = User(
-        id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+        id_=unique_id, first_name=users_first_name, second_name=users_second_name, email=users_email, ui_lang=ui_lang,
+        ui_settings=ui_settings, employee_account=employee_account, access_rights=access_rights, logon_status=logon_status,
+        logon_last_modif=logon_last_modif
     )
 
     # Doesn't exist? Add it to the database.
     if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, picture)
+        User.create(unique_id, users_first_name, users_second_name, users_email, ui_lang, ui_settings, employee_account,
+                    access_rights, logon_status, logon_last_modif)
 
     # Begin user session by logging the user in
     login_user(user)
