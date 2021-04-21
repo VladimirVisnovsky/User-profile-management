@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ first_name }} {{ second_name }}</title>
+        <style>
+            p {text-align: center;}
+            button {text-align: center;}
+            div {text-align: center;}
+        </style>
+    </head>
+    <body>
+        <p>Hello, {{ first_name }} {{ second_name }}. You're logged in!</p>
+        <p><b>Email:</b> {{ email }}</p>
+        <div>
+            <button type="button" onclick="location.href='/logout'">Logout</button>
+        </div>
+    </body>
+</html>

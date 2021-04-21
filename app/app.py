@@ -5,13 +5,13 @@ import sqlite3
 from datetime import datetime
 
 # Third-party libraries
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, url_for, render_template
 from flask_login import (
     LoginManager,
     current_user,
     login_required,
     login_user,
-    logout_user,
+    logout_user
 )
 
 from oauthlib.oauth2 import WebApplicationClient
@@ -55,15 +55,9 @@ def load_user(user_id):
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return (
-            "<p>Hello, {} {}! You're logged in!</p>"
-            "<p>Email: {}</p>"
-            '<a class="button" href="/logout">Logout</a>'.format(
-                current_user.first_name, current_user.second_name, current_user.email
-            )
-        )
+        return render_template('logged_in_page.html', first_name=current_user.first_name, second_name=current_user.second_name, email=current_user.email)
     else:
-        return '<a class="button" href="/login">Google Login</a>'
+        return render_template('home_page.html')
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
