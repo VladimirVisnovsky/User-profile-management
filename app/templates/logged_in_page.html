@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="5">
         <title>{{ first_name }} {{ second_name }}</title>
         <style>
             p {text-align: center;}
@@ -12,8 +13,14 @@
     <body>
         <p>Hello, {{ first_name }} {{ second_name }}. You're logged in!</p>
         <p><b>Email:</b> {{ email }}</p>
+        <p>Date/Time: <span id="datetime"></span> </p>
         <div>
             <button type="button" onclick="location.href='/logout'">Logout</button>
         </div>
+
+        <script>
+            var dt = new Date();
+            document.getElementById("datetime").innerHTML = dt.toLocaleString();
+        </script>
     </body>
 </html>

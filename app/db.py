@@ -1,5 +1,5 @@
 # http://flask.pocoo.org/docs/1.0/tutorial/database/
-import sqlite3
+import psycopg2
 
 import click
 from flask import current_app, g
@@ -7,12 +7,15 @@ from flask.cli import with_appcontext
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(
-            "sqlite_db", detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+        conn = psycopg2.connect(
+            host="localhost",
+            database="narnia",
+            user="admin",
+            password="admin")
+        # g.db.row_factory = sqlite3.Row
 
-    return g.db
+
+    return conn
 
 def close_db(e=None):
     db = g.pop("db", None)
@@ -21,10 +24,13 @@ def close_db(e=None):
         db.close()
 
 def init_db():
-    db = get_db()
-
-    with current_app.open_resource("schema.sql") as f:
-        db.executescript(f.read().decode("utf8"))
+    conn = get_db()
+    "id,first_name,second_name,email,ui_lang,ui_settings,employee_account,access_rights,logon_status,logon_last_modif"
+    cur = conn.cursor()
+    comm = "INSERT INTO test_user(id,first_name,second_name,email,ui_lang,ui_settings,employee_account,access_rights,logon_status,logon_last_modif) VALUES (9,\'Vlad\',\'Ludor\', 'vlad.ludor@gmail.com', 'sk','test', FALSE, 'admin', 1,'2021-01-02');"
+    cur.execute(comm)
+    cur.close()
+    conn.commit()
 
 @click.command("init-db")
 @with_appcontext
