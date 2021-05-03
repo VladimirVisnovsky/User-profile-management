@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Python standard libraries
 import json
 import os
@@ -18,8 +19,9 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-from db import init_db_command
+from db import init_db
 from user import User
+from create_table import *
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_ID", None)
@@ -37,12 +39,11 @@ app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Naive database setup
-# try:
-#     init_db_command()
-# except sqlite3.OperationalError:
-#     # Assume it's already been created
-#     pass
+
+if not init_db():
+    create_tables()
+    print('Created tables')
+
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
