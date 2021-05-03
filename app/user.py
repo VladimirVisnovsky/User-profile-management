@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 
-from db import get_db
+from db import get_connection
 
 class User(UserMixin):
     def __init__(self, id_, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif):
@@ -17,7 +17,7 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
-        conn = get_db()
+        conn = get_connection()
         cur = conn.cursor()
 
         cur.execute(
