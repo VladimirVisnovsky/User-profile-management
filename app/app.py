@@ -22,6 +22,7 @@ import requests
 from db import init_db
 from user import User
 from create_table import *
+from gener.create_test_data import *
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_ID", None)
@@ -43,6 +44,8 @@ login_manager.init_app(app)
 if not init_db():
     create_tables()
     print('Created tables')
+    generate_data()
+    populate_table()
 
 
 # OAuth 2 client setup
@@ -157,3 +160,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
