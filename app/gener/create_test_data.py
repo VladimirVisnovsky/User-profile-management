@@ -24,12 +24,12 @@ def read_file(file_name):
 print()
 
 def generate_data():
-    names = read_file('gener/names.txt')
-    last_names = read_file('gener/last_names.txt')
-    languages = read_file('gener/languages.txt')
+    names = read_file(f'{os.path.dirname(os.path.realpath(__file__))}/names.txt')
+    last_names = read_file(f'{os.path.dirname(os.path.realpath(__file__))}/last_names.txt')
+    languages = read_file(f'{os.path.dirname(os.path.realpath(__file__))}/languages.txt')
 
 
-    with open ('gener/data.csv', 'w', newline='') as csv_file:
+    with open (f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["ID", "first name", "second name", "email", "ui_lang", "ui_settings", "employee_account", "access_rights","logon_status","logon_last_modif"])
 
@@ -55,7 +55,7 @@ def populate_table():
             password="admin")
         cur = conn.cursor()
 
-        with open('gener/data.csv', 'r') as read_obj:
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'r') as read_obj:
             csv_reader = csv.reader(read_obj)
             next(csv_reader)
             for row in csv_reader:
