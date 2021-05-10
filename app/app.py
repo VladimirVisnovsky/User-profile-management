@@ -3,6 +3,8 @@
 import json
 import os
 import sqlite3
+import threading
+import time
 from datetime import datetime
 
 # Third-party libraries
@@ -23,6 +25,7 @@ from db import init_db
 from user import User
 from create_table import *
 from gener.create_test_data import *
+from refresh_table import refresh
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_ID", None)
@@ -131,7 +134,7 @@ def callback():
     employee_account = True
     access_rights = "complete access"
     logon_status = 2  # 2 = logged on, 0 = logged off
-    logon_last_modif = datetime.datetime.now()
+    logon_last_modif = float(datetime.datetime.timestamp(datetime.datetime.now()))
 
     # Create a user in your db with the information provided
     # by Google
@@ -152,12 +155,27 @@ def callback():
     # Send user back to homepage
     return redirect(url_for("index"))
 
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated and current_user.logon_status == 0:
+        logout_user()
+
+
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
+
+def refresh_users():
+    while True:
+        refresh()
+        time.sleep(60 * 3)
+
+
 if __name__ == "__main__":
+    threading.Thread(target=refresh_users).start()
     app.run(host="0.0.0.0", port=5000)
 

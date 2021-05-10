@@ -6,7 +6,7 @@ import psycopg2
 
 def create_tables():
     """ create tables in the PostgreSQL database"""
-    command = "CREATE TABLE test_user (id VARCHAR(255) PRIMARY KEY,first_name VARCHAR(255) NOT NULL,second_name VARCHAR(255) NOT NULL,email VARCHAR(255) UNIQUE NOT NULL,ui_lang VARCHAR(255) NOT NULL,ui_settings VARCHAR(255) NOT NULL,employee_account BOOLEAN NOT NULL,access_rights VARCHAR(255) NOT NULL,logon_status INTEGER NOT NULL,logon_last_modif DATE NOT NULL)"
+    command = "CREATE TABLE test_user (id VARCHAR(255) PRIMARY KEY,first_name VARCHAR(255) NOT NULL,second_name VARCHAR(255) NOT NULL,email VARCHAR(255) UNIQUE NOT NULL,ui_lang VARCHAR(255) NOT NULL,ui_settings VARCHAR(255) NOT NULL,employee_account BOOLEAN NOT NULL,access_rights VARCHAR(255) NOT NULL,logon_status INTEGER NOT NULL,logon_last_modif VARCHAR(255) NOT NULL)"
     conn = None
     try:
         # read the connection parameters
