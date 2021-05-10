@@ -131,7 +131,7 @@ def callback():
     employee_account = True
     access_rights = "complete access"
     logon_status = 2  # 2 = logged on, 0 = logged off
-    logon_last_modif = datetime.now()
+    logon_last_modif = datetime.datetime.now()
 
     # Create a user in your db with the information provided
     # by Google
