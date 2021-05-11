@@ -4,8 +4,12 @@ import os
 import random
 import datetime
 import sys
-
 import psycopg2
+from pathlib import Path
+import nosql_db
+from pymongo import MongoClient
+
+CLIENT = MongoClient("mongodb://localhost:27017")
 
 def read_file(file_name):
     file = open(file_name, 'r')
@@ -48,6 +52,7 @@ def populate_table():
         with open(f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'r') as read_obj:
             csv_reader = csv.reader(read_obj)
             next(csv_reader)
+            coll = nosql_db.create_collection(CLIENT)
             for row in csv_reader:
                 # row variable is a list that represents a row in csv
                 # insert into table
@@ -56,6 +61,12 @@ def populate_table():
                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]]
                 )
+                nosql_db.insert(coll, row)
+            nosql_db.close(CLIENT)
+
+            for x in coll.find():
+                print(x)
+
         # close communication with the PostgreSQL database server
         cur.close()
         # commit the changes

@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 import datetime
 from db import get_connection
+from pymongo import MongoClient
 
 class User(UserMixin):
     def __init__(self, id_, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif):
@@ -55,4 +56,13 @@ class User(UserMixin):
         )
         cur.close()
         conn.commit()
+
+client = MongoClient("mongodb://localhost:27017")
+mydb = client["bozena"]
+# creating collection
+col = mydb["test_user"]
+
+for x in col.find():
+    print(x)
+
 
