@@ -22,7 +22,7 @@ def generate_data():
     with open (f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["ID", "first name", "second name", "email", "ui_lang", "ui_settings", "employee_account", "access_rights","logon_status","logon_last_modif"])
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        date = datetime.datetime.timestamp(datetime.datetime.now())
 
         for i in range(100):
             name = random.choice(names)
