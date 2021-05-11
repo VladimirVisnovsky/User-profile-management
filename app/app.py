@@ -172,7 +172,7 @@ def logout():
 def refresh_users():
     while True:
         refresh()
-        time.sleep(60 * 3)
+        time.sleep(60)
 
 
 if __name__ == "__main__":
