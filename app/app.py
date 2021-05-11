@@ -5,7 +5,7 @@ import os
 import sqlite3
 import threading
 import time
-from datetime import datetime
+import datetime
 
 # Third-party libraries
 from flask import Flask, redirect, request, url_for, render_template
@@ -149,6 +149,8 @@ def callback():
     if not User.get(unique_id):
         User.create(unique_id, users_first_name, users_second_name, users_email, ui_lang, ui_settings, employee_account,
                     access_rights, logon_status, logon_last_modif)
+    else:
+        User.log_in(unique_id)
 
     # Begin user session by logging the user in
     login_user(user)
@@ -166,6 +168,11 @@ def before_request():
 @app.route("/logout")
 @login_required
 def logout():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE test_user SET logon_status = 0 WHERE id=%s", [current_user.id])
+    cur.close()
+    conn.commit()
     logout_user()
     return redirect(url_for("index"))
 

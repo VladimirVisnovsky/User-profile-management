@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-
+import datetime
 from db import get_connection
 
 class User(UserMixin):
@@ -41,6 +41,17 @@ class User(UserMixin):
             "INSERT INTO test_user (id, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif) "
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             [id_, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif]
+        )
+        cur.close()
+        conn.commit()
+
+    @staticmethod
+    def log_in(id_):
+        conn = get_connection()
+        cur = conn.cursor()
+        current_time = datetime.datetime.timestamp(datetime.datetime.now())
+        cur.execute(
+            "UPDATE test_user SET logon_status = 2, logon_last_modif=%s WHERE id=%s", [current_time, id_]
         )
         cur.close()
         conn.commit()
