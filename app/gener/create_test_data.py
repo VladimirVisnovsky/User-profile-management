@@ -24,7 +24,7 @@ def generate_data():
         writer.writerow(["ID", "first name", "second name", "email", "ui_lang", "ui_settings", "employee_account", "access_rights","logon_status","logon_last_modif"])
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        for i in range(10000):
+        for i in range(100):
             name = random.choice(names)
             last_name = random.choice(last_names)
             email = name.lower() + "." + last_name.lower() + str(random.randint(0,1000)) + "@gmail.com"
@@ -65,5 +65,3 @@ def populate_table():
     finally:
         if conn is not None:
             conn.close()
-
-generate_data()

@@ -21,7 +21,7 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-from db import init_db
+from db import init_db, get_connection
 from user import User
 from create_table import *
 from gener.create_test_data import *
@@ -62,7 +62,8 @@ def load_user(user_id):
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return render_template('logged_in_page.html', first_name=current_user.first_name, second_name=current_user.second_name, email=current_user.email)
+        active_users = number_of_active_users()
+        return render_template('logged_in_page.html', first_name=current_user.first_name, second_name=current_user.second_name, email=current_user.email, active_users=active_users)
     else:
         return render_template('home_page.html')
 
@@ -168,14 +169,24 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
+@app.route("/number")
+def number_redirect():
+    return redirect(url_for("index"))
+
+def number_of_active_users():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT COUNT(id) FROM test_user")
+    number = cur.fetchone()
+    return number[0]
+
 
 def refresh_users():
     while True:
         refresh()
         time.sleep(60)
 
-
 if __name__ == "__main__":
     threading.Thread(target=refresh_users).start()
     app.run(host="0.0.0.0", port=5000)
-
