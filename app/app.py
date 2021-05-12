@@ -47,7 +47,7 @@ login_manager.init_app(app)
 if not init_db():
     create_tables()
     print('Created tables')
-    generate_data()
+    # generate_data()
     populate_table()
 
 
@@ -161,8 +161,20 @@ def callback():
 
 @app.before_request
 def before_request():
-    if current_user.is_authenticated and current_user.logon_status == 0:
-        logout_user()
+    if current_user.is_authenticated:
+        if current_user.logon_status == 0:
+            logout_user()
+            return
+
+        conn =  get_connection()
+        cur = conn.cursor()
+        current_time = datetime.datetime.timestamp(datetime.datetime.now())
+        cur.execute("UPDATE test_user SET logon_last_modif=%s WHERE id=%s", [current_time, current_user.id])
+        cur.close()
+        conn.commit()
+
+        if current_user.logon_status == 0:
+            logout_user()
 
 
 @app.route("/logout")
@@ -184,7 +196,7 @@ def number_of_active_users():
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT COUNT(id) FROM test_user")
+    cur.execute("SELECT COUNT(id) FROM test_user WHERE logon_status=2")
     number = cur.fetchone()
     return number[0]
 

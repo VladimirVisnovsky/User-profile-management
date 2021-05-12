@@ -63,6 +63,6 @@ def drop_table_test_nosql():
 
 
 
-timeit_run_tests()
+# timeit_run_tests()
 # select_all_test_postgre()
 # select_all_test_nosql()

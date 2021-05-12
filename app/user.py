@@ -57,12 +57,4 @@ class User(UserMixin):
         cur.close()
         conn.commit()
 
-client = MongoClient("mongodb://localhost:27017")
-mydb = client["bozena"]
-# creating collection
-col = mydb["test_user"]
-
-for x in col.find():
-    print(x)
-
 

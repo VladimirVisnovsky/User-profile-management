@@ -10,6 +10,7 @@ import nosql_db
 from pymongo import MongoClient
 
 CLIENT = MongoClient("mongodb://localhost:27017")
+TEST_DATA = 'dataHundred.csv'
 
 def read_file(file_name):
     file = open(file_name, 'r')
@@ -23,7 +24,7 @@ def generate_data():
     languages = read_file(f'{os.path.dirname(os.path.realpath(__file__))}/languages.txt')
 
 
-    with open (f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'w', newline='') as csv_file:
+    with open (f'{os.path.dirname(os.path.realpath(__file__))}/{TEST_DATA}', 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["ID", "first name", "second name", "email", "ui_lang", "ui_settings", "employee_account", "access_rights","logon_status","logon_last_modif"])
         date = datetime.datetime.timestamp(datetime.datetime.now())
@@ -49,7 +50,7 @@ def populate_table():
             password="admin")
         cur = conn.cursor()
 
-        with open(f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'r') as read_obj:
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}/{TEST_DATA}', 'r') as read_obj:
             csv_reader = csv.reader(read_obj)
             next(csv_reader)
             coll = nosql_db.get_collection(CLIENT)
@@ -63,9 +64,6 @@ def populate_table():
                 )
                 nosql_db.insert(coll, row)
             nosql_db.close(CLIENT)
-
-            # for x in coll.find():
-            #     print(x)
 
         # close communication with the PostgreSQL database server
         cur.close()
