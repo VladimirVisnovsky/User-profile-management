@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import timeit
-import db
+import postgre_db
 import os
 import nosql_db
 from pymongo import MongoClient
@@ -27,7 +27,7 @@ def run_test(test_name, method_name):
 
 
 def delete_one_row_test_postgre():
-    conn = db.get_connection()
+    conn = postgre_db.get_connection()
     cur = conn.cursor()
     cur.execute("DELETE FROM test_user WHERE id='1';")
     cur.close()
@@ -39,7 +39,7 @@ def delete_one_row_test_nosql():
     nosql_db.delete(coll, query)
 
 def delete_multiple_rows_test_postgre():
-    conn = db.get_connection()
+    conn = postgre_db.get_connection()
     cur = conn.cursor()
     cur.execute("DELETE FROM test_user WHERE first_name LIKE '%o%';")
     cur.close()
@@ -51,7 +51,7 @@ def delete_multiple_rows_test_nosql():
     nosql_db.delete(coll, query)
 
 def drop_table_test_postgre():
-    conn = db.get_connection()
+    conn = postgre_db.get_connection()
     cur = conn.cursor()
     cur.execute("DROP TABLE test_user;")
     cur.close()

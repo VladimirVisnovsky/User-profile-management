@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 import datetime
-from db import get_connection
+from postgre_db import get_connection
 from pymongo import MongoClient
 
 class User(UserMixin):

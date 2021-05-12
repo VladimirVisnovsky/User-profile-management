@@ -21,7 +21,7 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-from db import init_db, get_connection
+from postgre_db import init_db, get_connection
 from user import User
 from create_table import *
 from gener.create_test_data import *

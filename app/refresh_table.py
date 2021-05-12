@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import user
-import db
+import postgre_db
 import datetime
 
 def refresh():
-    conn = db.get_connection()
+    conn = postgre_db.get_connection()
     cur = conn.cursor()
     current_time = datetime.datetime.timestamp(datetime.datetime.now())
 
