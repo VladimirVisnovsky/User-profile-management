@@ -52,7 +52,7 @@ def populate_table():
         with open(f'{os.path.dirname(os.path.realpath(__file__))}/data.csv', 'r') as read_obj:
             csv_reader = csv.reader(read_obj)
             next(csv_reader)
-            coll = nosql_db.create_collection(CLIENT)
+            coll = nosql_db.get_collection(CLIENT)
             for row in csv_reader:
                 # row variable is a list that represents a row in csv
                 # insert into table
@@ -64,8 +64,8 @@ def populate_table():
                 nosql_db.insert(coll, row)
             nosql_db.close(CLIENT)
 
-            for x in coll.find():
-                print(x)
+            # for x in coll.find():
+            #     print(x)
 
         # close communication with the PostgreSQL database server
         cur.close()

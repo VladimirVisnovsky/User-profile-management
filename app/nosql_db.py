@@ -2,7 +2,7 @@
 import sys
 
 
-def create_collection(client):
+def get_collection(client):
     # creating database
     mydb = client["bozena"]
     # creating collection
@@ -22,6 +22,12 @@ def insert(collection, data):
 
     result = collection.insert_one(row)
     print("ID:", result.inserted_id)
+
+def delete(collection, query):
+    x = collection.delete_many(query)
+    print(x)
+    print(x.deleted_count)
+    print(type(x))
 
 def close(client):
     client.close()

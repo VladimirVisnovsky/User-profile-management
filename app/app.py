@@ -26,7 +26,7 @@ from user import User
 from create_table import *
 from gener.create_test_data import *
 from refresh_table import refresh
-
+from performance_tests import timeit_create
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_SECRET", None)
