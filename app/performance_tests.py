@@ -9,16 +9,21 @@ CLIENT = MongoClient("mongodb://localhost:27017")
 
 def timeit_run_tests():
 
+    tests = [("Delete one row test", "delete_one_row_test"),
+             ("Delete multiple rows test", "delete_multiple_rows_test"),
+             ("Table drop test", "drop_table_test")]
 
-    elapsed_time = timeit.timeit('delete_one_row_test_postgre()', 'from __main__ import delete_one_row_test_postgre', number=1)
-    print(elapsed_time)
-    elapsed_time = timeit.timeit('delete_one_row_test_nosql()', 'from __main__ import delete_one_row_test_nosql', number=1)
-    print(elapsed_time)
+    for test in tests:
+        run_test(test[0], test[1])
 
-    elapsed_time = timeit.timeit('delete_multiple_rows_test_postgre()', 'from __main__ import delete_multiple_rows_test_postgre', number=1)
-    print(elapsed_time)
-    elapsed_time = timeit.timeit('delete_multiple_rows_test_nosql()', 'from __main__ import delete_multiple_rows_test_nosql', number=1)
-    print(elapsed_time)
+def run_test(test_name, method_name):
+    print(test_name)
+    print("PostgreSQL:")
+    elapsed_time = timeit.timeit(method_name + "_postgre()", "from __main__ import " + method_name + "_postgre", number=1)
+    print("Time:", elapsed_time)
+    print("NoSQL:")
+    elapsed_time = timeit.timeit(method_name + "_nosql()", "from __main__ import " + method_name + "_nosql", number=1)
+    print("Time:", elapsed_time)
 
 
 def delete_one_row_test_postgre():
@@ -45,6 +50,16 @@ def delete_multiple_rows_test_nosql():
     query = {"first_name": {"$regex": "[a-zA-Z]*u[a-zA-Z]*"}}
     nosql_db.delete(coll, query)
 
+def drop_table_test_postgre():
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("DROP TABLE test_user;")
+    cur.close()
+    conn.commit()
+
+def drop_table_test_nosql():
+    coll = nosql_db.get_collection(CLIENT)
+    nosql_db.drop_collection(coll)
 
 
 

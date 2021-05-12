@@ -21,13 +21,12 @@ def insert(collection, data):
              "logon_last_modif": data[9]}
 
     result = collection.insert_one(row)
-    print("ID:", result.inserted_id)
 
 def delete(collection, query):
     x = collection.delete_many(query)
-    print(x)
-    print(x.deleted_count)
-    print(type(x))
+
+def drop_collection(collection):
+    collection.drop()
 
 def close(client):
     client.close()
