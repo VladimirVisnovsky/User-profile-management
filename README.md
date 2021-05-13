@@ -1,9 +1,8 @@
 # User-profile-management
-## Web interface run instructions
-1. install all required packages in requirements.txt
-2. login is done via Google so you will need 2 ENV variables GOOGLE_CLIENT and GOOGLE_ID
-3. run app.py
+## Software needed
+1. PgAdmin https://www.pgadmin.org/ (or psql command line interface)
+2. mongodb https://www.mongodb.com/ (mongo command for command line interface)
+3. Python 3.6 or higher
+4. install all required packages in requirements.txt
 
-## PostgreSQL database instructions
-1. install pgAdmin from link https://www.pgadmin.org/download/
-2. connect //TODO
+Note: web login is done via Google so you will need 2 ENV variables GOOGLE_CLIENT and GOOGLE_ID (ask admins for those tokens)
