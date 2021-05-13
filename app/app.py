@@ -49,8 +49,8 @@ if not init_db():
     create_tables()
     print('Created tables')
     # generate_data()
-    populate_table('dataHundred.csv')
-
+    populate_table('dataMillion.csv')
+    print('Populated tables')
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
