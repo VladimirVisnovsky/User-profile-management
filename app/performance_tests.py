@@ -12,13 +12,14 @@ CLIENT = MongoClient("mongodb://localhost:27017")
 
 def timeit_run_tests():
 
-    tests = [("Select all test", "select_all_test"),
+    tests = [("Select active users test", "select_active_users_test"),
+             ("Select all test", "select_all_test"),
              ("Insert one row test", "insert_one_row_test"),
              ("Delete one row test", "delete_one_row_test"),
              ("Delete multiple rows test", "delete_multiple_rows_test"),
              ("Table drop test", "drop_table_test")]
 
-    datasets = ['dataHundred.csv', 'data10Thousand.csv'] #, 'dataMillion.csv'
+    datasets = ['dataHundred.csv']# , 'data10Thousand.csv' #, 'dataMillion.csv'
 
 
     for dataset in datasets:
@@ -42,6 +43,18 @@ def run_test(test_name, method_name):
     print("Time:", elapsed_time)
     print()
 
+def select_active_users_test_postgre():
+    conn = postgre_db.get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM test_user WHERE logon_status='2'")
+    cur.close()
+    conn.commit()
+
+def select_active_users_test_nosql():
+    coll = nosql_db.get_collection(CLIENT)
+    query = {"logon_status": {"$regex": "2"}}
+    nosql_db.select(coll, query)
+
 def select_all_test_postgre():
     conn = postgre_db.get_connection()
     cur = conn.cursor()
@@ -50,7 +63,8 @@ def select_all_test_postgre():
     conn.commit()
 
 def select_all_test_nosql():
-    pass
+    coll = nosql_db.get_collection(CLIENT)
+    nosql_db.select_all(coll)
 
 def insert_one_row_test_postgre():
     conn = postgre_db.get_connection()
@@ -65,7 +79,10 @@ def insert_one_row_test_postgre():
     conn.commit()
 
 def insert_one_row_test_nosql():
-    pass
+    coll = nosql_db.get_collection(CLIENT)
+    logon_last_modif = float(datetime.datetime.timestamp(datetime.datetime.now()))
+    data = [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, logon_last_modif]
+    nosql_db.insert(coll, data)
 
 def delete_one_row_test_postgre():
     conn = postgre_db.get_connection()
@@ -104,3 +121,4 @@ def drop_table_test_nosql():
 
 
 timeit_run_tests()
+
