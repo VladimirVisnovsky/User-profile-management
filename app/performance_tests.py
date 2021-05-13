@@ -35,7 +35,7 @@ def timeit_run_tests():
         elif (dataset == 'data10Thousand.csv'):
             print('Table created and populated. 4993 active users out of total 10 000.')
         elif (dataset == 'dataMillion.csv'):
-            print('Table created and populate. 498 995 active users out of total 1 000 000.')
+            print('Table created and populated. 498 995 active users out of total 1 000 000.')
             
         print('Running tests:')
         print()
