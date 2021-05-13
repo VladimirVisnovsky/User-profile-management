@@ -13,14 +13,14 @@ ACTUAL_TIME = float(datetime.datetime.timestamp(datetime.datetime.now()))
 
 def timeit_run_tests():
 
-    tests = [("Select active users test", "select_active_users_test"),
-             ("Select all test", "select_all_test"),
-             ("Insert one row test", "insert_one_row_test"),
-             ("Update one row test", "update_one_row_test"),
-             ("Update active users test", "update_active_users_test"),
-             ("Delete one row test", "delete_one_row_test"),
-             ("Delete inactive users test", "delete_inactive_users_test"),
-             ("Table drop test", "drop_table_test")]
+    tests = [("TEST: select active users", "select_active_users_test"),
+             ("TEST: select all", "select_all_test"),
+             ("TEST: insert one row", "insert_one_row_test"),
+             ("TEST: update one row", "update_one_row_test"),
+             ("TEST: update active users", "update_active_users_test"),
+             ("TEST: delete one row", "delete_one_row_test"),
+             ("TEST: delete inactive users", "delete_inactive_users_test"),
+             ("TEST: drop table", "drop_table_test")]
 
     datasets = ['dataHundred.csv', 'data10Thousand.csv'] # , 'dataMillion.csv'
 
@@ -81,9 +81,9 @@ def insert_one_row_test_postgre():
     conn = postgre_db.get_connection()
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO test_user (id, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, ACTUAL_TIME) "
+        "INSERT INTO test_user (id, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif)"
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-        [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, logon_last_modif]
+        [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, ACTUAL_TIME]
     )
     cur.close()
     conn.commit()
