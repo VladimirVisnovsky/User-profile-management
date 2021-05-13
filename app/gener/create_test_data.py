@@ -34,7 +34,7 @@ def generate_data():
             last_name = random.choice(last_names)
             email = name.lower() + "." + last_name.lower() + str(i) + "@gmail.com"
             lang = random.choice(languages)
-            writer.writerow([i, name, last_name, email, lang, "default", random.choice([True, False]), "complete access", 2, date])
+            writer.writerow([i, name, last_name, email, lang, "default", random.choice([True, False]), "complete access", random.choice([0, 2]), date])
 
 def populate_table(TEST_DATA):
     conn = None

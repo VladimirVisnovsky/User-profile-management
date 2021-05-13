@@ -45,10 +45,11 @@ login_manager.init_app(app)
 
 
 if not init_db():
+    print('Creating table, this might take a moment.')
     create_tables()
     print('Created tables')
     # generate_data()
-    populate_table()
+    populate_table('dataHundred.csv')
 
 
 # OAuth 2 client setup
