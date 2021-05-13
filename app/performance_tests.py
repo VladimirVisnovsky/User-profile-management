@@ -13,7 +13,8 @@ ACTUAL_TIME = float(datetime.datetime.timestamp(datetime.datetime.now()))
 
 def timeit_run_tests():
 
-    tests = [("TEST: select active users", "select_active_users_test"),
+    tests = [("TEST: select one row", "select_one_row_test"),
+             ("TEST: select active users", "select_active_users_test"),
              ("TEST: select all", "select_all_test"),
              ("TEST: insert one row", "insert_one_row_test"),
              ("TEST: update one row", "update_one_row_test"),
@@ -54,6 +55,18 @@ def run_test(test_name, method_name):
     print("Time:", elapsed_time)
     print()
 
+def select_one_row_test_postgre():
+    conn = postgre_db.get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM test_user WHERE id='1'")
+    cur.close()
+    conn.commit()
+
+def select_one_row_test_nosql():
+    coll = nosql_db.get_collection(CLIENT)
+    query = {"id": {"$regex": "1"}}
+    nosql_db.select(coll, query)
+
 def select_active_users_test_postgre():
     conn = postgre_db.get_connection()
     cur = conn.cursor()
@@ -90,7 +103,7 @@ def insert_one_row_test_postgre():
 
 def insert_one_row_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    data = [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, ACTUAL_TIME]
+    data = ["999999999", "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", "True", "complete access", "2", str(ACTUAL_TIME)]
     nosql_db.insert(coll, data)
 
 def update_one_row_test_postgre():
@@ -117,7 +130,7 @@ def update_active_users_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
     query = {"logon_status": {"$regex": "2"}}
     data = {"$set": {"logon_last_modif": ACTUAL_TIME}}
-    nosql_db.update(coll, query, data)
+    nosql_db.update_many(coll, query, data)
 
 def delete_one_row_test_postgre():
     conn = postgre_db.get_connection()
@@ -155,3 +168,4 @@ def drop_table_test_nosql():
     nosql_db.drop_collection(coll)
 
 timeit_run_tests()
+
