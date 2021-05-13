@@ -19,14 +19,22 @@ def timeit_run_tests():
              ("Delete multiple rows test", "delete_multiple_rows_test"),
              ("Table drop test", "drop_table_test")]
 
-    datasets = ['dataHundred.csv']# , 'data10Thousand.csv' #, 'dataMillion.csv'
+    datasets = ['dataHundred.csv']# , 'data10Thousand.csv' , 'dataMillion.csv'
 
 
     for dataset in datasets:
         print('Creating test_user table and populating it with ' + dataset + '. This process might take several minutes.')
         create_tables()
         populate_table(dataset)
-        print('Table created and populated. Running tests:')
+
+        if (dataset == 'dataHundred.csv'):
+            print('Table created and populated. 54 active users out of total 100.')
+        elif (dataset == 'data10Thousand.csv'):
+            print('Table created and populated. 4993 active users out of total 10 000.')
+        elif (dataset == 'dataMillion.csv'):
+            print('Table created and populate. active users out of total 1 000 000.')
+            
+        print('Running tests:')
         print()
 
         for test in tests:
