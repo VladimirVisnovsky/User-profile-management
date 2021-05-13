@@ -28,8 +28,14 @@ def insert(collection, data):
 
     result = collection.insert_one(row)
 
+def update(collection, query, data):
+    collection.update_one(query, data)
+
+def update_many(collection, query, data):
+    return collection.update_many(query, data)
+
 def delete(collection, query):
-    x = collection.delete_many(query)
+    return collection.delete_many(query)
 
 def drop_collection(collection):
     collection.drop()

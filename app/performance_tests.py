@@ -9,17 +9,20 @@ from gener.create_test_data import populate_table
 import datetime
 
 CLIENT = MongoClient("mongodb://localhost:27017")
+ACTUAL_TIME = float(datetime.datetime.timestamp(datetime.datetime.now()))
 
 def timeit_run_tests():
 
     tests = [("Select active users test", "select_active_users_test"),
              ("Select all test", "select_all_test"),
              ("Insert one row test", "insert_one_row_test"),
+             ("Update one row test", "update_one_row_test"),
+             ("Update active users test", "update_active_users_test"),
              ("Delete one row test", "delete_one_row_test"),
-             ("Delete multiple rows test", "delete_multiple_rows_test"),
+             ("Delete inactive users test", "delete_inactive_users_test"),
              ("Table drop test", "drop_table_test")]
 
-    datasets = ['dataHundred.csv']# , 'data10Thousand.csv' , 'dataMillion.csv'
+    datasets = ['dataHundred.csv', 'data10Thousand.csv'] # , 'dataMillion.csv'
 
 
     for dataset in datasets:
@@ -32,7 +35,7 @@ def timeit_run_tests():
         elif (dataset == 'data10Thousand.csv'):
             print('Table created and populated. 4993 active users out of total 10 000.')
         elif (dataset == 'dataMillion.csv'):
-            print('Table created and populate. active users out of total 1 000 000.')
+            print('Table created and populate. 498 995 active users out of total 1 000 000.')
             
         print('Running tests:')
         print()
@@ -77,9 +80,8 @@ def select_all_test_nosql():
 def insert_one_row_test_postgre():
     conn = postgre_db.get_connection()
     cur = conn.cursor()
-    logon_last_modif = float(datetime.datetime.timestamp(datetime.datetime.now()))
     cur.execute(
-        "INSERT INTO test_user (id, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, logon_last_modif) "
+        "INSERT INTO test_user (id, first_name, second_name, email, ui_lang, ui_settings, employee_account, access_rights, logon_status, ACTUAL_TIME) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
         [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, logon_last_modif]
     )
@@ -88,9 +90,34 @@ def insert_one_row_test_postgre():
 
 def insert_one_row_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    logon_last_modif = float(datetime.datetime.timestamp(datetime.datetime.now()))
-    data = [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, logon_last_modif]
+    data = [999999999, "Peter", "Parker", "peter.parker@gmail.com", "sk", "default ui settings", True, "complete access", 2, ACTUAL_TIME]
     nosql_db.insert(coll, data)
+
+def update_one_row_test_postgre():
+    conn = postgre_db.get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE test_user SET logon_last_modif=%s WHERE id='1';", [ACTUAL_TIME])
+    cur.close()
+    conn.commit()
+
+def update_one_row_test_nosql():
+    coll = nosql_db.get_collection(CLIENT)
+    query = {"id": {"$regex": "1"}}
+    data = {"$set": {"logon_last_modif": ACTUAL_TIME}}
+    nosql_db.update(coll, query, data)
+
+def update_active_users_test_postgre():
+    conn = postgre_db.get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE test_user SET logon_last_modif=%s WHERE logon_status='2';", [ACTUAL_TIME])
+    cur.close()
+    conn.commit()
+
+def update_active_users_test_nosql():
+    coll = nosql_db.get_collection(CLIENT)
+    query = {"logon_status": {"$regex": "2"}}
+    data = {"$set": {"logon_last_modif": ACTUAL_TIME}}
+    nosql_db.update(coll, query, data)
 
 def delete_one_row_test_postgre():
     conn = postgre_db.get_connection()
@@ -104,16 +131,16 @@ def delete_one_row_test_nosql():
     query = {"id": {"$regex": "1"}}
     nosql_db.delete(coll, query)
 
-def delete_multiple_rows_test_postgre():
+def delete_inactive_users_test_postgre():
     conn = postgre_db.get_connection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM test_user WHERE first_name LIKE '%o%';")
+    cur.execute("DELETE FROM test_user WHERE logon_status='0';")
     cur.close()
     conn.commit()
 
-def delete_multiple_rows_test_nosql():
+def delete_inactive_users_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"first_name": {"$regex": "[a-zA-Z]*o[a-zA-Z]*"}}
+    query = {"logon_status": {"$regex": "0"}}
     nosql_db.delete(coll, query)
 
 def drop_table_test_postgre():
