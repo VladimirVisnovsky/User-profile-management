@@ -8,6 +8,12 @@ def get_collection(client):
     # creating collection
     return mydb["test_user"]
 
+def select(collection, query):
+    return collection.find(query)
+
+def select_all(collection):
+    return collection.find()
+
 def insert(collection, data):
     row = {"id": data[0],
              "first_name": data[1],
