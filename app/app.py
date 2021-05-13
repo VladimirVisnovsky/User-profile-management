@@ -45,7 +45,7 @@ login_manager.init_app(app)
 
 
 if not init_db():
-    print('Creating table, this might take a moment.')
+    print('Creating and populating tables, this might take a moment.')
     create_tables()
     print('Created tables')
     # generate_data()
