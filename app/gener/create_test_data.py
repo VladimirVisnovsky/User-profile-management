@@ -10,7 +10,7 @@ import nosql_db
 from pymongo import MongoClient
 
 CLIENT = MongoClient("mongodb://localhost:27017")
-TEST_DATA = 'dataHundred.csv'
+TEST_DATA = 'dataMilion.csv'
 
 def read_file(file_name):
     file = open(file_name, 'r')
@@ -29,15 +29,15 @@ def generate_data():
         writer.writerow(["ID", "first name", "second name", "email", "ui_lang", "ui_settings", "employee_account", "access_rights","logon_status","logon_last_modif"])
         date = datetime.datetime.timestamp(datetime.datetime.now())
 
-        for i in range(100):
+        for i in range(1000000):
             name = random.choice(names)
             last_name = random.choice(last_names)
-            email = name.lower() + "." + last_name.lower() + str(random.randint(0,1000)) + "@gmail.com"
+            email = name.lower() + "." + last_name.lower() + str(i) + "@gmail.com"
             lang = random.choice(languages)
             writer.writerow([i, name, last_name, email, lang, "default", random.choice([True, False]), "complete access", 2, date])
 
-
-def populate_table():
+# generate_data()
+def populate_table(TEST_DATA):
     conn = None
     try:
         # read the connection parameters
@@ -74,3 +74,4 @@ def populate_table():
     finally:
         if conn is not None:
             conn.close()
+
