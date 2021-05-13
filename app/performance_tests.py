@@ -63,7 +63,7 @@ def select_active_users_test_postgre():
 
 def select_active_users_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"logon_status": {"$regex": "2"}}
+    query = {"logon_status": 2}
     nosql_db.select(coll, query)
 
 def select_all_test_postgre():
@@ -102,7 +102,7 @@ def update_one_row_test_postgre():
 
 def update_one_row_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"id": {"$regex": "1"}}
+    query = {"id": 1}
     data = {"$set": {"logon_last_modif": ACTUAL_TIME}}
     nosql_db.update(coll, query, data)
 
@@ -115,7 +115,7 @@ def update_active_users_test_postgre():
 
 def update_active_users_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"logon_status": {"$regex": "2"}}
+    query = {"logon_status": 2}
     data = {"$set": {"logon_last_modif": ACTUAL_TIME}}
     nosql_db.update(coll, query, data)
 
@@ -128,7 +128,7 @@ def delete_one_row_test_postgre():
 
 def delete_one_row_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"id": {"$regex": "1"}}
+    query = {"id": 1}
     nosql_db.delete(coll, query)
 
 def delete_inactive_users_test_postgre():
@@ -140,7 +140,7 @@ def delete_inactive_users_test_postgre():
 
 def delete_inactive_users_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
-    query = {"logon_status": {"$regex": "0"}}
+    query = {"logon_status": 0}
     nosql_db.delete(coll, query)
 
 def drop_table_test_postgre():
@@ -154,6 +154,4 @@ def drop_table_test_nosql():
     coll = nosql_db.get_collection(CLIENT)
     nosql_db.drop_collection(coll)
 
-
 timeit_run_tests()
-
