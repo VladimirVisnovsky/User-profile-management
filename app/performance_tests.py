@@ -23,7 +23,7 @@ def timeit_run_tests():
              ("TEST: delete inactive users", "delete_inactive_users_test"),
              ("TEST: drop table", "drop_table_test")]
 
-    datasets = ['dataHundred.csv', 'data10Thousand.csv'] # , 'dataMillion.csv'
+    datasets = ['dataHundred.csv', 'data10Thousand.csv' , 'dataMillion.csv']
 
 
     for dataset in datasets:
